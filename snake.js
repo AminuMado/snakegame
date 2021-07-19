@@ -7,17 +7,18 @@ let headX = 20;
 let headY = 20;
 let p_headX = 425;
 let p_headY = 225;
-let foodX = 21;
-let foodY = 21;
+let foodX = 20;
+let foodY = 20;
 let p_foodX = Math.random()*canvas.width;
 let p_foodY = Math.random()*canvas.height;
-let speed = 5;
+let speed = 3;
 let leftPressed = false;
 let upPressed = false;
 let rightPressed = false;
 let downPressed = false;
 //EventListners
-document.addEventListener('keydown',movement);
+document.addEventListener('keydown',keyDown);
+document.addEventListener('keyup',keyUp);
 
 //Game Loop
 function gameLoop(){
@@ -25,6 +26,7 @@ function gameLoop(){
     controls();
     drawPlayer();
     drawFood();
+    boundryCheck();
     requestAnimationFrame(gameLoop);
 
 
@@ -49,19 +51,37 @@ function drawFood(){
 function controls(){
     if (leftPressed === true){
         p_headX = p_headX - speed;
+        console.log ("X " + p_headX)
     }
     if (upPressed === true){
-        p_headY = p_headY - speed; 
+        p_headY = p_headY - speed;
+        console.log ("Y " + p_headY) 
     }
     if (rightPressed === true){
         p_headX = p_headX + speed;
+        console.log ("X " + p_headX)
     }
     if (downPressed === true){
         p_headY = p_headY + speed;
+        console.log ("Y " + p_headY)
     }
     
 }
-function movement(event){
+function boundryCheck(){
+    if(p_headY > canvas.height){
+        p_headY =  -9;
+    }
+    if(p_headY < -10){
+        p_headY = canvas.height;
+    }
+    if(p_headX > canvas.width){
+        p_headX =  -9;
+    }
+    if(p_headX < -10){
+        p_headX = canvas.width;
+    }
+}
+function keyDown(event){
     if(event.keyCode == 37){
         leftPressed = true;
         rightPressed = false;
@@ -88,6 +108,37 @@ function movement(event){
         upPressed = false;
         leftPressed = false;
         rightPressed = false;
+        
+        
+    }
+}
+function keyUp(event){
+    if(event.keyCode == 37){
+        leftPressed = false;
+        rightPressed = false;
+        upPressed =false;
+        downPressed =false;
+        
+        
+    }
+    if(event.keyCode == 38){
+        leftPressed = false;
+        rightPressed = false;
+        upPressed =false;
+        downPressed =false;
+        
+    }
+    if(event.keyCode == 39){
+        leftPressed = false;
+        rightPressed = false;
+        upPressed =false;
+        downPressed =false;
+    }
+    if (event.keyCode == 40){
+        leftPressed = false;
+        rightPressed = false;
+        upPressed =false;
+        downPressed =false;
         
         
     }

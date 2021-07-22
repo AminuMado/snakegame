@@ -3,27 +3,35 @@ const context = canvas.getContext('2d');
 canvas.width = 850;
 canvas.height = 550;
 
-let headX = 20;
-let headY = 20;
-let p_headX = 425;
-let p_headY = 225;
+let tileCountX = 34;
+let tileCountY = 22;
+let tileSizeX = canvas.width/tileCountX -5;
+let tileSizeY = canvas.height/tileCountY -5;
+/* let headX = 20;
+let headY = 20; */
+let p_headX = 12.5*tileCountX;
+let p_headY = 12.5*tileCountY;
 let foodX = 20;
 let foodY = 20;
-let p_foodX = Math.random()*canvas.width;
-let p_foodY = Math.random()*canvas.height;
-let speed = 3;
+let p_foodX = (Math.floor(Math.random()*tileCountX))*tileSizeX;
+let p_foodY = (Math.floor(Math.random()*tileCountY))*tileSizeY;
+/* let speed = 3;
 let leftPressed = false;
 let upPressed = false;
 let rightPressed = false;
-let downPressed = false;
+let downPressed = false; */
+let yVelocity = 0
+let xVelocity = 0
 //EventListners
 document.addEventListener('keydown',keyDown);
-document.addEventListener('keyup',keyUp);
+/* document.addEventListener('keyup',keyUp); */
 
 //Game Loop
 function gameLoop(){
     clearCanvas();
-    controls();
+    /* controls(); */
+    changePosition();
+    checkCollision();
     drawPlayer();
     drawFood();
     boundryCheck();
@@ -40,7 +48,7 @@ function clearCanvas(){
 }
 function drawPlayer(){
     context.fillStyle = 'crimson';
-    context.fillRect(p_headX,p_headY,headX,headY);
+    context.fillRect(p_headX,p_headY,tileSizeX,tileSizeY);
     context.fill();
 }
 function drawFood(){
@@ -48,7 +56,11 @@ function drawFood(){
     context.fillRect(p_foodX,p_foodY,foodX,foodY);
     context.fill();
 }
-function controls(){
+function changePosition(){
+    p_headX = p_headX + xVelocity;
+    p_headY = p_headY + yVelocity;
+}
+/* function controls(){
     if (leftPressed === true){
         p_headX = p_headX - speed;
         console.log ("X " + p_headX)
@@ -66,7 +78,7 @@ function controls(){
         console.log ("Y " + p_headY)
     }
     
-}
+} */
 function boundryCheck(){
     if(p_headY > canvas.height){
         p_headY =  -9;
@@ -81,38 +93,64 @@ function boundryCheck(){
         p_headX = canvas.width;
     }
 }
+function checkCollision(){
+    if(p_headX === p_foodX && p_headY === p_foodY){
+        p_foodX = (Math.floor(Math.random()*tileCountX))*tileSizeX;
+        p_foodY = (Math.floor(Math.random()*tileCountY))*tileSizeY;
+    }
+}
 function keyDown(event){
     if(event.keyCode == 37){
-        leftPressed = true;
+        if(xVelocity == 1){
+            return;
+        }
+        yVelocity = 0;
+        xVelocity = -1;
+        /* leftPressed = true;
         rightPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
         
         
     }
     if(event.keyCode == 38){
-        upPressed = true;
+        if(yVelocity == 1){
+            return;
+        }
+        yVelocity = -1;
+        xVelocity = 0;
+       /*  upPressed = true;
         downPressed = false;
         leftPressed = false;
-        rightPressed = false;
+        rightPressed = false; */
         
     }
     if(event.keyCode == 39){
-        rightPressed = true;
+        if(xVelocity == -1){
+            return;
+        }
+        yVelocity = 0;
+        xVelocity = 1;
+        /* rightPressed = true;
         leftPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
     }
     if (event.keyCode == 40){
-        downPressed = true;
+        if(yVelocity == -1){
+            return;
+        }
+        yVelocity = 1;
+        xVelocity = 0;
+        /* downPressed = true;
         upPressed = false;
         leftPressed = false;
-        rightPressed = false;
+        rightPressed = false; */
         
         
     }
 }
-function keyUp(event){
+/* function keyUp(event){
     if(event.keyCode == 37){
         leftPressed = false;
         rightPressed = false;
@@ -142,6 +180,6 @@ function keyUp(event){
         
         
     }
-}
+} */
 
 gameLoop();

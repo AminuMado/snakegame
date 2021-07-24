@@ -3,29 +3,29 @@ const context = canvas.getContext('2d');
 canvas.width = 850;
 canvas.height = 550;
 
-let tileCountX = 34;
-let tileCountY = 22;
-let tileSizeX = canvas.width/tileCountX -5;
-let tileSizeY = canvas.height/tileCountY -5;
-/* let headX = 20;
-let headY = 20; */
-let p_headX = 12.5*tileCountX;
-let p_headY = 12.5*tileCountY;
-let foodX = 20;
-let foodY = 20;
-let p_foodX = (Math.floor(Math.random()*tileCountX))*tileSizeX;
-let p_foodY = (Math.floor(Math.random()*tileCountY))*tileSizeY;
-/* let speed = 3;
+
+let tileSize = 25;
+let tileCountX = canvas.width/tileSize;
+let tileCountY = canvas.height/tileSize;
+let headX = tileSize - 5;
+let headY = tileSize - 5;
+let p_headX = 17*tileSize;
+let p_headY = 11*tileSize;
+let foodX = tileSize - 5;
+let foodY = tileSize - 5;
+let p_foodX = (Math.floor(Math.random()*tileCountX))*tileSize;
+let p_foodY = (Math.floor(Math.random()*tileCountY))*tileSize;
+let speed = 3;
 let leftPressed = false;
 let upPressed = false;
 let rightPressed = false;
-let downPressed = false; */
+let downPressed = false;
 let yVelocity = 0
 let xVelocity = 0
 //EventListners
 document.addEventListener('keydown',keyDown);
-/* document.addEventListener('keyup',keyUp); */
-
+/* document.addEventListener('keyup',keyUp);
+ */
 //Game Loop
 function gameLoop(){
     clearCanvas();
@@ -35,9 +35,11 @@ function gameLoop(){
     drawPlayer();
     drawFood();
     boundryCheck();
-    requestAnimationFrame(gameLoop);
+    setTimeout(gameLoop,1000/speed);
 
-
+   
+    console.log("p head X"+p_headX)
+    console.log("p head Y"+p_headY)
 
 }
 
@@ -48,7 +50,7 @@ function clearCanvas(){
 }
 function drawPlayer(){
     context.fillStyle = 'crimson';
-    context.fillRect(p_headX,p_headY,tileSizeX,tileSizeY);
+    context.fillRect(p_headX,p_headY,headX,headY);
     context.fill();
 }
 function drawFood(){
@@ -57,8 +59,8 @@ function drawFood(){
     context.fill();
 }
 function changePosition(){
-    p_headX = p_headX + xVelocity;
-    p_headY = p_headY + yVelocity;
+    p_headX = p_headX + xVelocity*tileSize;
+    p_headY = p_headY + yVelocity*tileSize;
 }
 /* function controls(){
     if (leftPressed === true){
@@ -79,24 +81,25 @@ function changePosition(){
     }
     
 } */
+//This boundryCheck was tricky
 function boundryCheck(){
-    if(p_headY > canvas.height){
-        p_headY =  -9;
+    if(p_headY > (tileCountY-1)*tileSize){
+        p_headY = -1*tileSize;
     }
-    if(p_headY < -10){
-        p_headY = canvas.height;
+   else if(p_headY < 0){
+        p_headY = tileCountY*tileSize;
+    } 
+    else if(p_headX > (tileCountX-1)*tileSize){
+        p_headX = -1*tileSize;
     }
-    if(p_headX > canvas.width){
-        p_headX =  -9;
-    }
-    if(p_headX < -10){
-        p_headX = canvas.width;
-    }
+    else if(p_headX < 0){
+        p_headX = tileCountX*tileSize;
+    } 
 }
 function checkCollision(){
     if(p_headX === p_foodX && p_headY === p_foodY){
-        p_foodX = (Math.floor(Math.random()*tileCountX))*tileSizeX;
-        p_foodY = (Math.floor(Math.random()*tileCountY))*tileSizeY;
+        p_foodX = (Math.floor(Math.random()*tileCountX))*tileSize;
+        p_foodY = (Math.floor(Math.random()*tileCountY))*tileSize;
     }
 }
 function keyDown(event){
@@ -150,36 +153,45 @@ function keyDown(event){
         
     }
 }
-/* function keyUp(event){
+ 
+function keyUp(event){
     if(event.keyCode == 37){
-        leftPressed = false;
+        yVelocity = 0;
+        xVelocity = 0;
+        /* leftPressed = false;
         rightPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
         
         
     }
     if(event.keyCode == 38){
-        leftPressed = false;
+        yVelocity = 0;
+        xVelocity = 0;
+        /* leftPressed = false;
         rightPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
         
     }
     if(event.keyCode == 39){
-        leftPressed = false;
+        yVelocity = 0;
+        xVelocity = 0;
+        /* leftPressed = false;
         rightPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
     }
     if (event.keyCode == 40){
-        leftPressed = false;
+        yVelocity = 0;
+        xVelocity = 0;
+        /* leftPressed = false;
         rightPressed = false;
         upPressed =false;
-        downPressed =false;
+        downPressed =false; */
         
         
     }
-} */
+} 
 
 gameLoop();
